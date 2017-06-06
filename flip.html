@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</head>
+
+
+<body>
+	<style>
+		input {
+			line-height: normal;
+			padding: 10px 10px;
+			border-radius: 3px;
+			border: 1px solid #ddd;
+		}
+	</style>
+	<div style="padding-top: 100px;" class="container highlight">
+
+		<h3 id="account">You have $500.00</h3>
+		<hr>
+		<h5>Your Current Bet:</h5>
+		<p><input type="number" value="0" id="bet"></p>
+		<p><button class="btn btn-primary" id="addBet">Place Bet</button></p>
+		<hr>
+		<h5>Add Money to your Account:</h5>
+		<p><input type="number" value="0" id="money"></p>
+		<p><button class="btn btn-primary" id="addCash" data-toggle="modal">Add Money</button></p>
+
+	</div>
+
+	<script>
+		var balance = 500;
+		document.getElementById('addBet').addEventListener('click', play);
+		document.getElementById('addCash').addEventListener('click', addMoney);
+
+
+		function play() {
+
+			var bet = parseInt(document.getElementById('bet').value, 10);
+
+			if(bet <= balance && bet > 0)
+			{
+				var accepted = confirm("Do you really want to bet $" + bet.toLocaleString("en-US"));
+				if(accepted)
+				{
+            var win = Math.round( Math.random() ); // Random win
+            if(win)
+            {
+            	balance += bet;
+            	alert("You won $" + bet.toLocaleString("en-US"));
+            	alert("Your new balance is $" + balance.toLocaleString("en-US"));
+            }
+            else
+            {
+            	balance -= bet;
+            	alert("You lost $" + bet.toLocaleString("en-US"));
+            	alert("Your new balance is $" + balance.toLocaleString("en-US"));
+            }
+
+            if(balance === 0) { 
+            	alert('You ran out of money...'); 
+
+            }
+            document.getElementById('account').textContent = "You have $" + (balance.toLocaleString("en-US", {minimumFractionDigits: 2, maximumFractionDigits: 2}));
+        }
+        document.getElementById('bet').value = 0;
+    }
+    else if(bet > balance) {
+    	alert("Your bet is too high, you dont' have enough money.");
+
+    }
+    else if(bet < balance)
+    {
+    	alert("Your bet is too low, please bet $1.00 or more.");
+    }
+}
+
+
+function addMoney () {
+
+	var money = parseInt(document.getElementById('money').value, 10);
+
+	if (money > 0)
+	{
+		var add = confirm("Do you really want to add $" + (money.toLocaleString("en-US")) + " to your account?");
+		balance += money;
+		alert("You added $" + money.toLocaleString("en-US") + " to your account.");
+	}
+	else
+	{
+		if(money <= 0) {
+			alert("Please add an amount equal or grater than $1.00");
+		}
+	}
+	document.getElementById("account").textContent = "You have $" + (balance.toLocaleString("en-US", {minimumFractionDigits: 2, maximumFractionDigits: 2}));
+	document.getElementById('money').value = 0;
+}
+</script>
+
+</body>
+</html>
